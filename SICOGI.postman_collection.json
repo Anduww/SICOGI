@@ -1,0 +1,212 @@
+{
+  "info": {
+    "name": "SICOGI - API Supabase",
+    "description": "Colección de pruebas para la API REST autogenerada por Supabase del proyecto SICOGI (Tecnólogo ADSO - SENA).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://romxshqemjqtholydtqy.supabase.co" },
+    { "key": "anon_key", "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvbXhzaHFlbWpxdGhvbHlkdHF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4ODA1MjUsImV4cCI6MjA5NjQ1NjUyNX0.yYTEO74LPQvKuD9FGmCS6kZVw4B9EVJtQ61iSQnqSCE" },
+    { "key": "user_email", "value": "tu_correo_de_prueba@ejemplo.com" },
+    { "key": "user_password", "value": "tu_password" },
+    { "key": "user_token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "01. Login (obtener token de usuario)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const data = pm.response.json();",
+              "if (data.access_token) {",
+              "  pm.collectionVariables.set('user_token', data.access_token);",
+              "  console.log('Token guardado en {{user_token}}');",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "apikey", "value": "{{anon_key}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/auth/v1/token?grant_type=password",
+          "host": ["{{base_url}}"],
+          "path": ["auth", "v1", "token"],
+          "query": [{ "key": "grant_type", "value": "password" }]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"{{user_password}}\"\n}"
+        }
+      }
+    },
+    {
+      "name": "02. Listar categorías",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "apikey", "value": "{{anon_key}}" },
+          { "key": "Authorization", "value": "Bearer {{anon_key}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/rest/v1/categorias?select=*",
+          "host": ["{{base_url}}"],
+          "path": ["rest", "v1", "categorias"],
+          "query": [{ "key": "select", "value": "*" }]
+        }
+      }
+    },
+    {
+      "name": "03. Listar productos",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "apikey", "value": "{{anon_key}}" },
+          { "key": "Authorization", "value": "Bearer {{anon_key}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/rest/v1/productos?select=*,categorias(nombre,slug)",
+          "host": ["{{base_url}}"],
+          "path": ["rest", "v1", "productos"],
+          "query": [{ "key": "select", "value": "*,categorias(nombre,slug)" }]
+        }
+      }
+    },
+    {
+      "name": "04. Filtrar productos por categoría (tecnologia)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "apikey", "value": "{{anon_key}}" },
+          { "key": "Authorization", "value": "Bearer {{anon_key}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/rest/v1/productos?select=*,categorias!inner(slug)&categorias.slug=eq.tecnologia",
+          "host": ["{{base_url}}"],
+          "path": ["rest", "v1", "productos"],
+          "query": [
+            { "key": "select", "value": "*,categorias!inner(slug)" },
+            { "key": "categorias.slug", "value": "eq.tecnologia" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "05. Crear producto",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "apikey", "value": "{{anon_key}}" },
+          { "key": "Authorization", "value": "Bearer {{anon_key}}" },
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Prefer", "value": "return=representation" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/rest/v1/productos",
+          "host": ["{{base_url}}"],
+          "path": ["rest", "v1", "productos"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"categoria_id\": 1,\n  \"nombre\": \"Producto de prueba Postman\",\n  \"descripcion\": \"Creado desde Postman para evidencia del proyecto\",\n  \"precio\": 99000,\n  \"emoji\": \"🧪\",\n  \"badge\": \"new\",\n  \"estrellas\": 5\n}"
+        }
+      }
+    },
+    {
+      "name": "06. Ver mis pedidos (requiere login)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "apikey", "value": "{{anon_key}}" },
+          { "key": "Authorization", "value": "Bearer {{user_token}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/rest/v1/pedidos?select=*,pedido_items(*)",
+          "host": ["{{base_url}}"],
+          "path": ["rest", "v1", "pedidos"],
+          "query": [{ "key": "select", "value": "*,pedido_items(*)" }]
+        }
+      }
+    },
+    {
+      "name": "07. Crear pedido (requiere login)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const data = pm.response.json();",
+              "if (Array.isArray(data) && data[0] && data[0].id) {",
+              "  pm.collectionVariables.set('pedido_id', data[0].id);",
+              "  console.log('pedido_id guardado:', data[0].id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "apikey", "value": "{{anon_key}}" },
+          { "key": "Authorization", "value": "Bearer {{user_token}}" },
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Prefer", "value": "return=representation" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/rest/v1/pedidos",
+          "host": ["{{base_url}}"],
+          "path": ["rest", "v1", "pedidos"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"total\": 299900\n}"
+        }
+      }
+    },
+    {
+      "name": "08. Agregar ítem al pedido (requiere login)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "apikey", "value": "{{anon_key}}" },
+          { "key": "Authorization", "value": "Bearer {{user_token}}" },
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Prefer", "value": "return=representation" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/rest/v1/pedido_items",
+          "host": ["{{base_url}}"],
+          "path": ["rest", "v1", "pedido_items"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pedido_id\": \"{{pedido_id}}\",\n  \"producto_id\": 1,\n  \"cantidad\": 1,\n  \"precio_unitario\": 299900\n}"
+        }
+      }
+    },
+    {
+      "name": "09. Prueba negativa: pedidos sin token (debe fallar/venir vacío)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "apikey", "value": "{{anon_key}}" },
+          { "key": "Authorization", "value": "Bearer {{anon_key}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/rest/v1/pedidos?select=*",
+          "host": ["{{base_url}}"],
+          "path": ["rest", "v1", "pedidos"],
+          "query": [{ "key": "select", "value": "*" }]
+        }
+      }
+    }
+  ]
+}
