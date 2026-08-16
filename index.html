@@ -49,7 +49,7 @@
   .btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
   .spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.3);border-top-color:#0d0d0d;border-radius:50%;animation:spin .6s linear infinite}
   .hint{text-align:center;font-size:12px;color:var(--text3);margin-top:16px}
-  nav{position:sticky;top:0;z-index:100;background:rgba(13,13,13,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:68px}
+  nav{position:sticky;top:0;z-index:100;background:rgba(13,13,13,.97);border-bottom:1px solid var(--border);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:68px}
   .nav-brand{font-family:var(--ff-display);font-size:22px;font-weight:900;letter-spacing:5px;color:var(--gold)}
   .nav-links{display:flex;align-items:center;gap:32px;list-style:none}
   .nav-links a{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;transition:color var(--tr)}
@@ -60,7 +60,7 @@
   .cart-badge{background:var(--gold);color:#0d0d0d;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
   .user-avatar{width:36px;height:36px;border-radius:50%;background:var(--gold-dim);border:1px solid rgba(201,168,76,.3);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;position:relative}
   .dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);min-width:200px;box-shadow:var(--shadow);overflow:hidden;display:none;z-index:200}
-  .user-avatar:hover .dropdown{display:block}
+  .dropdown.open{display:block}
   .dropdown-header{padding:16px;border-bottom:1px solid var(--border)}
   .dropdown-header .dname{font-size:14px;font-weight:500;color:var(--text)}
   .dropdown-header .demail{font-size:12px;color:var(--text3)}
@@ -85,13 +85,13 @@
   .search-wrap input::placeholder{color:var(--text3)}
   .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px;pointer-events:none}
   .products{padding:0 40px 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
-  .product-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:transform var(--tr),border-color var(--tr),box-shadow var(--tr)}
+  .product-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:transform var(--tr),border-color var(--tr),box-shadow var(--tr);contain:content}
   .product-card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,.25);box-shadow:0 16px 48px rgba(0,0,0,.4)}
   .product-img{width:100%;height:220px;display:block;background:var(--bg3);position:relative;overflow:hidden}
-  .product-img-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:72px;transition:transform .4s ease;background:linear-gradient(135deg,var(--bg3) 0%,var(--bg2) 100%)}
+  .product-img-inner{width:100%;height:100%;display:block;object-fit:cover;transition:transform .4s ease;background:linear-gradient(135deg,var(--bg3) 0%,var(--bg2) 100%)}
   .product-card:hover .product-img-inner{transform:scale(1.05)}
   .badge-wrap{position:absolute;top:12px;left:12px;display:flex;gap:6px}
-  .badge{padding:4px 10px;border-radius:6px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
+  .badge{padding:5px 11px;border-radius:6px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
   .badge-new{background:var(--gold);color:#0d0d0d}
   .badge-sale{background:var(--danger);color:#fff}
   .badge-hot{background:#e07840;color:#fff}
@@ -99,12 +99,12 @@
   .product-category{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
   .product-name{font-family:var(--ff-display);font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.3}
   .product-desc{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.5}
-  .product-footer{display:flex;align-items:center;justify-content:space-between}
-  .price-wrap{display:flex;align-items:baseline;gap:8px}
-  .price{font-family:var(--ff-display);font-size:22px;font-weight:700;color:var(--gold)}
-  .price-old{font-size:14px;color:var(--text3);text-decoration:line-through}
+  .product-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  .price-wrap{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .price{font-family:var(--ff-display);font-size:20px;font-weight:700;color:var(--gold)}
+  .price-old{font-size:13px;color:var(--text3);text-decoration:line-through}
   .stars{display:flex;gap:2px;font-size:12px;color:var(--gold);margin-top:2px}
-  .btn-add{padding:10px 18px;background:var(--gold-dim);border:1px solid rgba(201,168,76,.25);border-radius:8px;color:var(--gold);font-family:var(--ff-body);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all var(--tr);white-space:nowrap}
+  .btn-add{padding:9px 14px;background:var(--gold-dim);border:1px solid rgba(201,168,76,.25);border-radius:8px;color:var(--gold);font-family:var(--ff-body);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all var(--tr);white-space:nowrap;flex-shrink:0}
   .btn-add:hover{background:var(--gold);color:#0d0d0d;border-color:var(--gold)}
   .cart-panel{position:fixed;right:0;top:0;bottom:0;width:360px;z-index:500;background:var(--card);border-left:1px solid var(--border);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);box-shadow:-24px 0 80px rgba(0,0,0,.4)}
   .cart-panel.open{transform:translateX(0)}
@@ -169,7 +169,7 @@
   .order-item .oi-status{display:inline-block;font-size:10px;letter-spacing:1px;text-transform:uppercase;background:rgba(91,189,138,.15);color:var(--success);padding:3px 9px;border-radius:999px}
   .order-item .oi-list{font-size:12px;color:var(--text3);margin-top:6px}
   .empty-state{text-align:center;padding:32px 12px;color:var(--text3)}
-  .fav-heart{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(13,13,13,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all var(--tr);z-index:2}
+  .fav-heart{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(13,13,13,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all var(--tr);z-index:2}
   .fav-heart.active{background:rgba(226,91,91,.2);border-color:var(--danger)}
   .profile-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px}
   .profile-row span:first-child{color:var(--text3)}
@@ -215,16 +215,17 @@
     <li><a href="javascript:void(0)" id="nav-novedades" onclick="navFilterBadge('new',this)">Novedades</a></li>
     <li><a href="javascript:void(0)" id="nav-ofertas" onclick="navFilterBadge('sale',this)">Ofertas</a></li>
     <li><a href="javascript:void(0)" onclick="openModal('modal-contacto')">Contacto</a></li>
+    <li id="nav-admin-item" class="hidden"><a href="javascript:void(0)" onclick="openAdminPanel()">🛡️ Admin</a></li>
   </ul>
   <div class="nav-right">
     <button class="cart-btn" onclick="toggleCart()">🛍️ Carrito <span class="cart-badge" id="cart-count">0</span></button>
-    <div class="user-avatar" id="user-avatar">
+    <div class="user-avatar" id="user-avatar" onclick="toggleUserDropdown(event)">
       <span id="avatar-initials">--</span>
-      <div class="dropdown">
+      <div class="dropdown" id="user-dropdown">
         <div class="dropdown-header"><div class="dname" id="drop-name">...</div><div class="demail" id="drop-email"></div></div>
-        <div class="dropdown-item" onclick="openProfile()">👤 Mi perfil</div>
-        <div class="dropdown-item" onclick="openOrders()">📦 Mis pedidos</div>
-        <div class="dropdown-item" onclick="openFavorites()">⭐ Favoritos</div>
+        <div class="dropdown-item" onclick="openProfile();closeUserDropdown()">👤 Mi perfil</div>
+        <div class="dropdown-item" onclick="openOrders();closeUserDropdown()">📦 Mis pedidos</div>
+        <div class="dropdown-item" onclick="openFavorites();closeUserDropdown()">⭐ Favoritos</div>
         <hr style="border:none;border-top:1px solid var(--border);margin:4px 0">
         <div class="dropdown-item danger" onclick="doLogout()">🚪 Cerrar sesión</div>
       </div>
@@ -321,6 +322,14 @@
   </div>
 </div>
 
+<!-- Modal: Panel Admin -->
+<div class="modal-overlay" id="modal-admin">
+  <div class="modal-box" style="max-width:640px">
+    <div class="modal-head"><h2>🛡️ Panel de administrador — Pedidos</h2><button class="modal-close" onclick="closeModal('modal-admin')">✕</button></div>
+    <div class="modal-body" id="admin-body"><div class="empty-state">Cargando...</div></div>
+  </div>
+</div>
+
 <!-- Modal: Contacto -->
 <div class="modal-overlay" id="modal-contacto">
   <div class="modal-box">
@@ -344,32 +353,42 @@ const SUPABASE_URL = 'https://romxshqemjqtholydtqy.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvbXhzaHFlbWpxdGhvbHlkdHF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4ODA1MjUsImV4cCI6MjA5NjQ1NjUyNX0.yYTEO74LPQvKuD9FGmCS6kZVw4B9EVJtQ61iSQnqSCE';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Los productos ya NO están fijos en el código: se cargan desde la tabla
-// "productos" de Supabase (con join a "categorias") al iniciar la página.
-let PRODUCTS = [];
+// Catálogo de productos con imágenes. Está fijo aquí en el código (no depende
+// de la tabla "productos" de Supabase), así siempre se ve el inventario completo.
+let PRODUCTS = [
+  {id:1, name:'Audífonos inalámbricos', category:'tecnologia', price:189000, oldPrice:249000, img:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80', desc:'Cancelación de ruido activa, batería de 30 horas.', badge:'sale', stars:5},
+  {id:2, name:'Reloj inteligente', category:'tecnologia', price:349000, oldPrice:null, img:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80', desc:'Monitor de ritmo cardíaco, GPS y notificaciones.', badge:'new', stars:4},
+  {id:3, name:'Cámara mirrorless', category:'tecnologia', price:1890000, oldPrice:null, img:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&q=80', desc:'Sensor APS-C, video 4K, ideal para creadores.', badge:'hot', stars:5},
+  {id:4, name:'Parlante Bluetooth', category:'tecnologia', price:129000, oldPrice:169000, img:'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&q=80', desc:'Sonido envolvente, resistente al agua IPX7.', badge:'sale', stars:4},
+  {id:5, name:'Chaqueta de cuero', category:'moda', price:259000, oldPrice:null, img:'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&q=80', desc:'Diseño clásico, corte moderno, para toda ocasión.', badge:'hot', stars:5},
+  {id:6, name:'Bolso de mano', category:'moda', price:129000, oldPrice:159000, img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&q=80', desc:'Cuero sintético premium, disponible en varios colores.', badge:'sale', stars:4},
+  {id:7, name:'Tenis urbanos', category:'moda', price:219000, oldPrice:null, img:'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500&q=80', desc:'Comodidad todo el día, estilo minimalista.', badge:'new', stars:5},
+  {id:8, name:'Gafas de sol', category:'moda', price:89000, oldPrice:null, img:'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&q=80', desc:'Protección UV400, marco liviano.', badge:null, stars:4},
+  {id:9, name:'Lámpara de escritorio', category:'hogar', price:79000, oldPrice:null, img:'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500&q=80', desc:'Luz cálida regulable, diseño minimalista.', badge:null, stars:4},
+  {id:10, name:'Set de velas aromáticas', category:'hogar', price:45000, oldPrice:null, img:'https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?w=500&q=80', desc:'Aroma a vainilla y sándalo, pack por 3.', badge:'new', stars:5},
+  {id:11, name:'Set de cocina antiadherente', category:'hogar', price:249000, oldPrice:299000, img:'https://images.unsplash.com/photo-1584990347449-a0ffb6a0e327?w=500&q=80', desc:'6 piezas, apto para todo tipo de estufas.', badge:'sale', stars:4},
+  {id:12, name:'Balón de fútbol', category:'deportes', price:89000, oldPrice:null, img:'https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=500&q=80', desc:'Tamaño oficial, resistente al agua.', badge:null, stars:5},
+  {id:13, name:'Mancuernas ajustables', category:'deportes', price:219000, oldPrice:260000, img:'https://images.unsplash.com/photo-1584735175315-9d5df23860e6?w=500&q=80', desc:'De 2 a 20 kg, sistema de ajuste rápido.', badge:'sale', stars:4},
+  {id:14, name:'Bicicleta urbana', category:'deportes', price:1290000, oldPrice:null, img:'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=500&q=80', desc:'Marco de aluminio liviano, 21 velocidades.', badge:'hot', stars:5},
+  {id:15, name:'Set de skincare', category:'belleza', price:95000, oldPrice:null, img:'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500&q=80', desc:'Limpiador, tónico e hidratante facial.', badge:'hot', stars:5},
+  {id:16, name:'Perfume floral', category:'belleza', price:149000, oldPrice:null, img:'https://images.unsplash.com/photo-1541643600914-78b084683601?w=500&q=80', desc:'Fragancia fresca de larga duración.', badge:'new', stars:4},
+  {id:17, name:'Set de brochas de maquillaje', category:'belleza', price:69000, oldPrice:89000, img:'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500&q=80', desc:'12 piezas, cerdas suaves sintéticas.', badge:'sale', stars:4},
+  {id:18, name:'Teclado mecánico', category:'tecnologia', price:259000, oldPrice:299000, img:'https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=500&q=80', desc:'Switches táctiles, retroiluminado RGB.', badge:'sale', stars:5},
+  {id:19, name:'Mouse ergonómico', category:'tecnologia', price:99000, oldPrice:null, img:'https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&q=80', desc:'Sensor de alta precisión, inalámbrico.', badge:null, stars:4},
+  {id:20, name:'Vestido casual', category:'moda', price:139000, oldPrice:null, img:'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80', desc:'Tela ligera, ideal para el día a día.', badge:'new', stars:5},
+  {id:21, name:'Reloj clásico de cuero', category:'moda', price:229000, oldPrice:279000, img:'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=500&q=80', desc:'Correa de cuero genuino, maquinaria japonesa.', badge:'sale', stars:5},
+  {id:22, name:'Cojines decorativos', category:'hogar', price:59000, oldPrice:null, img:'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=500&q=80', desc:'Pack x2, funda de algodón suave.', badge:null, stars:4},
+  {id:23, name:'Planta artificial decorativa', category:'hogar', price:69000, oldPrice:null, img:'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=500&q=80', desc:'Bajo mantenimiento, luce siempre fresca.', badge:'new', stars:4},
+  {id:24, name:'Colchoneta de yoga', category:'deportes', price:79000, oldPrice:null, img:'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500&q=80', desc:'Antideslizante, 6mm de grosor.', badge:null, stars:5},
+  {id:25, name:'Guantes de entrenamiento', category:'deportes', price:59000, oldPrice:75000, img:'https://images.unsplash.com/photo-1517344884509-a0c97ec11bcc?w=500&q=80', desc:'Protección y agarre para pesas.', badge:'sale', stars:4},
+  {id:26, name:'Crema hidratante facial', category:'belleza', price:59000, oldPrice:null, img:'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500&q=80', desc:'Con ácido hialurónico, para todo tipo de piel.', badge:null, stars:5},
+];
 let cart={}, currentCat='todos', currentBadge=null;
 let favorites = new Set();
+let isAdmin = false;
+const CATEGORY_LABELS={tecnologia:'Tecnología',moda:'Moda',hogar:'Hogar',deportes:'Deportes',belleza:'Belleza'};
 
-async function loadProducts(){
-  const grid=document.getElementById('products-grid');
-  grid.innerHTML='<div class="no-results"><div class="nr-icon">⏳</div><p>Cargando productos...</p></div>';
-  const {data,error}=await sb.from('productos').select('*, categorias(nombre,slug)').order('id');
-  if(error){
-    grid.innerHTML='<div class="no-results"><div class="nr-icon">⚠️</div><p>No se pudieron cargar los productos desde Supabase.</p></div>';
-    console.error('Error cargando productos:',error.message);
-    return;
-  }
-  PRODUCTS = (data||[]).map(p=>({
-    id:p.id,
-    name:p.nombre,
-    category:p.categorias?p.categorias.slug:'otros',
-    price:Number(p.precio),
-    oldPrice:p.precio_anterior?Number(p.precio_anterior):null,
-    emoji:p.emoji||'🛍️',
-    desc:p.descripcion||'',
-    badge:p.badge||null,
-    stars:p.estrellas||5,
-  }));
+function loadProducts(){
   renderProducts();
 }
 
@@ -423,6 +442,16 @@ async function doRegister(){
 
 async function doLogout(){await sb.auth.signOut();location.reload();}
 
+function toggleUserDropdown(e){
+  if(e.target.closest('#user-dropdown'))return;
+  e.stopPropagation();
+  document.getElementById('user-dropdown').classList.toggle('open');
+}
+function closeUserDropdown(){document.getElementById('user-dropdown').classList.remove('open');}
+document.addEventListener('click',(e)=>{
+  if(!e.target.closest('#user-avatar'))closeUserDropdown();
+});
+
 function onUserLoggedIn(user){
   const meta=user.user_metadata||{};
   const fullName=meta.full_name||user.email.split('@')[0];
@@ -434,6 +463,13 @@ function onUserLoggedIn(user){
   ov.style.opacity='0';ov.style.transition='opacity .35s ease';
   setTimeout(()=>ov.classList.add('hidden'),350);
   showToast('🎉','¡Bienvenido, '+fullName+'!');
+  checkAdmin(user.id);
+}
+
+async function checkAdmin(userId){
+  const {data,error}=await sb.from('administradores').select('usuario_id').eq('usuario_id',userId).maybeSingle();
+  isAdmin = !!data && !error;
+  document.getElementById('nav-admin-item').classList.toggle('hidden',!isAdmin);
 }
 
 sb.auth.getSession().then(({data})=>{if(data.session)onUserLoggedIn(data.session.user);});
@@ -489,7 +525,7 @@ function renderProducts(){
     <div class="product-card">
       <div class="product-img">
         <div class="fav-heart ${favorites.has(p.id)?'active':''}" onclick="toggleFavorite(${p.id})">${favorites.has(p.id)?'❤️':'🤍'}</div>
-        <div class="product-img-inner">${p.emoji}</div>
+        <img class="product-img-inner" src="${p.img}" alt="${p.name}" loading="lazy" decoding="async">
         <div class="badge-wrap">
           ${p.badge==='new'?'<span class="badge badge-new">Nuevo</span>':''}
           ${p.badge==='sale'?'<span class="badge badge-sale">Oferta</span>':''}
@@ -497,7 +533,7 @@ function renderProducts(){
         </div>
       </div>
       <div class="product-body">
-        <div class="product-category">${p.category}</div>
+        <div class="product-category">${CATEGORY_LABELS[p.category]||p.category}</div>
         <div class="product-name">${p.name}</div>
         <div class="product-desc">${p.desc}</div>
         <div class="product-footer">
@@ -516,7 +552,7 @@ function renderProducts(){
 
 function addToCart(id){
   const p=PRODUCTS.find(x=>x.id===id);if(!p)return;
-  cart[id]=(cart[id]||0)+1;updateCartUI();showToast(p.emoji,p.name+' agregado al carrito');
+  cart[id]=(cart[id]||0)+1;updateCartUI();showToast('🛍️',p.name+' agregado al carrito');
 }
 function changeQty(id,d){if(!cart[id])return;cart[id]+=d;if(cart[id]<=0)delete cart[id];updateCartUI();}
 function removeFromCart(id){delete cart[id];updateCartUI();}
@@ -529,7 +565,7 @@ function updateCartUI(){
   if(!ids.length){iEl.innerHTML='<div class="empty-cart"><div class="empty-icon">🛒</div><p>Tu carrito está vacío</p></div>';fEl.innerHTML='';return;}
   iEl.innerHTML=ids.map(id=>{
     const p=PRODUCTS.find(x=>x.id==id);if(!p)return'';
-    return`<div class="cart-item"><div class="cart-item-emoji">${p.emoji}</div><div class="cart-item-info"><div class="cart-item-name">${p.name}</div><div class="cart-item-price">$${p.price.toLocaleString('es-CO')}</div><div class="cart-item-qty"><button class="qty-btn" onclick="changeQty(${id},-1)">−</button><span class="qty-num">${cart[id]}</span><button class="qty-btn" onclick="changeQty(${id},1)">+</button></div></div><button class="remove-item" onclick="removeFromCart(${id})">✕</button></div>`;
+    return`<div class="cart-item"><img class="cart-item-emoji" src="${p.img}" alt="${p.name}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0"><div class="cart-item-info"><div class="cart-item-name">${p.name}</div><div class="cart-item-price">$${p.price.toLocaleString('es-CO')}</div><div class="cart-item-qty"><button class="qty-btn" onclick="changeQty(${id},-1)">−</button><span class="qty-num">${cart[id]}</span><button class="qty-btn" onclick="changeQty(${id},1)">+</button></div></div><button class="remove-item" onclick="removeFromCart(${id})">✕</button></div>`;
   }).join('');
   const total=ids.reduce((s,k)=>{const p=PRODUCTS.find(x=>x.id==k);return s+(p?p.price*cart[k]:0);},0);
   fEl.innerHTML=`<div class="cart-total"><span>Total</span><span class="cart-total-price">$${total.toLocaleString('es-CO')}</span></div><button class="btn-checkout" onclick="checkout()">Finalizar compra →</button>`;
@@ -581,8 +617,10 @@ async function confirmarPago(){
   const total=ids.reduce((s,k)=>{const p=PRODUCTS.find(x=>x.id==k);return s+(p?p.price*cart[k]:0);},0);
 
   // 1. Crear el pedido
+  const nombreComprador=(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0];
   const {data:pedido,error:e1}=await sb.from('pedidos').insert({
-    usuario_id:user.id, total, estado:'procesado', metodo_pago:metodo
+    usuario_id:user.id, total, estado:'procesado', metodo_pago:metodo,
+    nombre_cliente:nombreComprador, correo_cliente:user.email
   }).select().single();
 
   if(e1){
@@ -655,6 +693,31 @@ async function openOrders(){
   }).join('');
 }
 
+async function openAdminPanel(){
+  if(!isAdmin)return;
+  openModal('modal-admin');
+  const body=document.getElementById('admin-body');
+  body.innerHTML='<div class="empty-state">Cargando pedidos...</div>';
+
+  const {data,error}=await sb
+    .from('pedidos')
+    .select('id, total, estado, metodo_pago, creado_en, nombre_cliente, correo_cliente, pedido_items(cantidad, precio_unitario, productos(nombre))')
+    .order('creado_en',{ascending:false});
+
+  if(error){body.innerHTML='<div class="empty-state">Error cargando pedidos: '+error.message+'</div>';return;}
+  if(!data||!data.length){body.innerHTML='<div class="empty-state">Aún no hay pedidos registrados.</div>';return;}
+
+  body.innerHTML=data.map(o=>{
+    const items=(o.pedido_items||[]).map(it=>`${it.cantidad}× ${it.productos?it.productos.nombre:'Producto'}`).join(', ');
+    return `<div class="order-item">
+      <div class="oi-top"><span>Pedido #${o.id.slice(0,8)}</span><span class="oi-status">${o.estado}</span></div>
+      <div class="oi-top"><span>👤 ${o.nombre_cliente||'—'} · ${o.correo_cliente||'—'}</span></div>
+      <div class="oi-top"><span>${new Date(o.creado_en).toLocaleDateString('es-CO')} · ${o.metodo_pago==='tarjeta'?'💳 Tarjeta':'💵 Contraentrega'}</span><span class="oi-total">$${Number(o.total).toLocaleString('es-CO')}</span></div>
+      <div class="oi-list">${items}</div>
+    </div>`;
+  }).join('');
+}
+
 function openFavorites(){
   openModal('modal-favoritos');
   const body=document.getElementById('favoritos-body');
@@ -662,7 +725,7 @@ function openFavorites(){
   if(!favProducts.length){body.innerHTML='<div class="empty-state">Aún no tienes favoritos ⭐</div>';return;}
   body.innerHTML=favProducts.map(p=>`
     <div class="order-item" style="display:flex;align-items:center;gap:12px">
-      <div style="font-size:28px">${p.emoji}</div>
+      <img src="${p.img}" alt="${p.name}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0">
       <div style="flex:1">
         <div style="font-size:14px;font-weight:600;color:var(--text)">${p.name}</div>
         <div style="font-size:13px;color:var(--gold)">$${p.price.toLocaleString('es-CO')}</div>
