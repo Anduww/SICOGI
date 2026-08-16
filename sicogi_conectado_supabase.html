@@ -142,6 +142,38 @@
   .no-results{grid-column:1/-1;text-align:center;padding:64px 24px;color:var(--text3)}
   .no-results .nr-icon{font-size:48px;margin-bottom:12px}
   @media(max-width:640px){nav{padding:0 16px}.nav-links{display:none}.hero{padding:56px 16px 40px}.filters-bar,.products{padding-left:16px;padding-right:16px}.cart-panel{width:100%}.auth-box{margin:16px;padding:36px 24px}footer{padding:32px 16px}}
+
+  /* ---- Modales genéricos ---- */
+  .modal-overlay{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;animation:fadeIn .25s ease;padding:20px}
+  .modal-overlay.open{display:flex}
+  .modal-box{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius-lg);width:100%;max-width:440px;max-height:85vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.6);animation:slideUp .3s cubic-bezier(.34,1.56,.64,1)}
+  .modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .modal-head h2{font-family:var(--ff-display);font-size:19px;color:var(--text)}
+  .modal-close{background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:4px;border-radius:6px}
+  .modal-close:hover{color:var(--text);background:var(--bg3)}
+  .modal-body{padding:22px 24px}
+  .modal-body p{color:var(--text2);font-size:14px;margin-bottom:10px}
+  .pay-options{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+  .pay-option{border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all var(--tr)}
+  .pay-option:hover{border-color:rgba(201,168,76,.4)}
+  .pay-option.selected{border-color:var(--gold);background:var(--gold-dim)}
+  .pay-option input{accent-color:var(--gold)}
+  .pay-option .po-title{font-size:14px;font-weight:600;color:var(--text)}
+  .pay-option .po-sub{font-size:12px;color:var(--text3)}
+  .pay-fields{display:none;gap:12px;flex-direction:column;margin-bottom:16px}
+  .pay-fields.show{display:flex}
+  .pay-fields .row{display:flex;gap:10px}
+  .order-item{border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+  .order-item .oi-top{display:flex;justify-content:space-between;font-size:13px;color:var(--text2);margin-bottom:6px}
+  .order-item .oi-total{color:var(--gold);font-weight:700}
+  .order-item .oi-status{display:inline-block;font-size:10px;letter-spacing:1px;text-transform:uppercase;background:rgba(91,189,138,.15);color:var(--success);padding:3px 9px;border-radius:999px}
+  .order-item .oi-list{font-size:12px;color:var(--text3);margin-top:6px}
+  .empty-state{text-align:center;padding:32px 12px;color:var(--text3)}
+  .fav-heart{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(13,13,13,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all var(--tr);z-index:2}
+  .fav-heart.active{background:rgba(226,91,91,.2);border-color:var(--danger)}
+  .profile-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px}
+  .profile-row span:first-child{color:var(--text3)}
+  .profile-row span:last-child{color:var(--text)}
 </style>
 </head>
 <body>
@@ -179,10 +211,10 @@
 <nav>
   <div class="nav-brand">SICOGI</div>
   <ul class="nav-links">
-    <li><a href="#" class="active">Tienda</a></li>
-    <li><a href="#">Novedades</a></li>
-    <li><a href="#">Ofertas</a></li>
-    <li><a href="#">Contacto</a></li>
+    <li><a href="javascript:void(0)" class="active" id="nav-tienda" onclick="navGoTienda()">Tienda</a></li>
+    <li><a href="javascript:void(0)" id="nav-novedades" onclick="navFilterBadge('new',this)">Novedades</a></li>
+    <li><a href="javascript:void(0)" id="nav-ofertas" onclick="navFilterBadge('sale',this)">Ofertas</a></li>
+    <li><a href="javascript:void(0)" onclick="openModal('modal-contacto')">Contacto</a></li>
   </ul>
   <div class="nav-right">
     <button class="cart-btn" onclick="toggleCart()">🛍️ Carrito <span class="cart-badge" id="cart-count">0</span></button>
@@ -190,9 +222,9 @@
       <span id="avatar-initials">--</span>
       <div class="dropdown">
         <div class="dropdown-header"><div class="dname" id="drop-name">...</div><div class="demail" id="drop-email"></div></div>
-        <div class="dropdown-item">👤 Mi perfil</div>
-        <div class="dropdown-item">📦 Mis pedidos</div>
-        <div class="dropdown-item">⭐ Favoritos</div>
+        <div class="dropdown-item" onclick="openProfile()">👤 Mi perfil</div>
+        <div class="dropdown-item" onclick="openOrders()">📦 Mis pedidos</div>
+        <div class="dropdown-item" onclick="openFavorites()">⭐ Favoritos</div>
         <hr style="border:none;border-top:1px solid var(--border);margin:4px 0">
         <div class="dropdown-item danger" onclick="doLogout()">🚪 Cerrar sesión</div>
       </div>
@@ -231,36 +263,115 @@
 
 <div class="toast-container" id="toasts"></div>
 
+<!-- Modal: Método de pago -->
+<div class="modal-overlay" id="modal-pago">
+  <div class="modal-box">
+    <div class="modal-head"><h2>Método de pago</h2><button class="modal-close" onclick="closeModal('modal-pago')">✕</button></div>
+    <div class="modal-body">
+      <p>Total a pagar: <strong id="pago-total" style="color:var(--gold)"></strong></p>
+      <div class="pay-options">
+        <label class="pay-option selected" id="opt-tarjeta">
+          <input type="radio" name="metodo-pago" value="tarjeta" checked onchange="selectPayMethod('tarjeta')">
+          <div><div class="po-title">💳 Tarjeta de crédito / débito</div><div class="po-sub">Simulado — solo para fines del proyecto formativo</div></div>
+        </label>
+        <label class="pay-option" id="opt-contraentrega">
+          <input type="radio" name="metodo-pago" value="contraentrega" onchange="selectPayMethod('contraentrega')">
+          <div><div class="po-title">💵 Pago contraentrega</div><div class="po-sub">Pagas en efectivo al recibir tu pedido</div></div>
+        </label>
+      </div>
+      <div class="pay-fields show" id="fields-tarjeta">
+        <div class="field-group"><label>Número de tarjeta</label><input type="text" id="card-number" placeholder="4111 1111 1111 1111" maxlength="19"></div>
+        <div class="row">
+          <div class="field-group" style="flex:1"><label>Vencimiento</label><input type="text" id="card-exp" placeholder="MM/AA" maxlength="5"></div>
+          <div class="field-group" style="flex:1"><label>CVV</label><input type="text" id="card-cvv" placeholder="123" maxlength="3"></div>
+        </div>
+        <div class="field-group"><label>Nombre en la tarjeta</label><input type="text" id="card-name" placeholder="Como aparece en la tarjeta"></div>
+      </div>
+      <div class="alert alert-error" id="pago-error"></div>
+      <button class="btn-primary" id="btn-pagar" onclick="confirmarPago()">Confirmar y pagar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Mis pedidos -->
+<div class="modal-overlay" id="modal-pedidos">
+  <div class="modal-box">
+    <div class="modal-head"><h2>Mis pedidos</h2><button class="modal-close" onclick="closeModal('modal-pedidos')">✕</button></div>
+    <div class="modal-body" id="pedidos-body"><div class="empty-state">Cargando...</div></div>
+  </div>
+</div>
+
+<!-- Modal: Mi perfil -->
+<div class="modal-overlay" id="modal-perfil">
+  <div class="modal-box">
+    <div class="modal-head"><h2>Mi perfil</h2><button class="modal-close" onclick="closeModal('modal-perfil')">✕</button></div>
+    <div class="modal-body">
+      <div class="profile-row"><span>Nombre</span><span id="perfil-nombre">—</span></div>
+      <div class="profile-row"><span>Correo</span><span id="perfil-correo">—</span></div>
+      <div class="profile-row"><span>Miembro desde</span><span id="perfil-desde">—</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Favoritos -->
+<div class="modal-overlay" id="modal-favoritos">
+  <div class="modal-box">
+    <div class="modal-head"><h2>Mis favoritos</h2><button class="modal-close" onclick="closeModal('modal-favoritos')">✕</button></div>
+    <div class="modal-body" id="favoritos-body"><div class="empty-state">Aún no tienes favoritos ⭐</div></div>
+  </div>
+</div>
+
+<!-- Modal: Contacto -->
+<div class="modal-overlay" id="modal-contacto">
+  <div class="modal-box">
+    <div class="modal-head"><h2>Contáctanos</h2><button class="modal-close" onclick="closeModal('modal-contacto')">✕</button></div>
+    <div class="modal-body">
+      <p>📍 Bazar Aurum — Bogotá, Colombia</p>
+      <p>✉️ contacto@bazaraurum.com</p>
+      <p>📞 +57 300 000 0000</p>
+      <p>🕐 Lunes a sábado, 9:00 a.m. – 7:00 p.m.</p>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-brand">SICOGI</div>
   <div class="footer-copy">© 2025 SICOGI. Todos los derechos reservados.</div>
 </footer>
 
 <script>
-const SUPABASE_URL = 'https://izdioqpdulpztaenmgrr.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6ZGlvcXBkdWxwenRhZW5tZ3JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1Mzc3NzAsImV4cCI6MjA5NzExMzc3MH0.waiRKoz7L-CVu6IH51Td4Zl7cSnlBD2szvrhDCQtN_k';
+const SUPABASE_URL = 'https://romxshqemjqtholydtqy.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvbXhzaHFlbWpxdGhvbHlkdHF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4ODA1MjUsImV4cCI6MjA5NjQ1NjUyNX0.yYTEO74LPQvKuD9FGmCS6kZVw4B9EVJtQ61iSQnqSCE';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const PRODUCTS = [
-  {id:1,name:'AirPods Pro',category:'tecnologia',price:299900,oldPrice:349900,emoji:'🎧',desc:'Cancelación de ruido activa con sonido envolvente.',badge:'sale',stars:5},
-  {id:2,name:'Smartwatch Elite',category:'tecnologia',price:459000,emoji:'⌚',desc:'Monitor de salud completo con GPS integrado.',badge:'new',stars:5},
-  {id:3,name:'Laptop UltraBook',category:'tecnologia',price:2890000,oldPrice:3200000,emoji:'💻',desc:'Rendimiento profesional en un diseño ultradelgado.',badge:'sale',stars:4},
-  {id:4,name:'Chaqueta Clásica',category:'moda',price:189000,emoji:'🧥',desc:'Corte italiano con tela premium importada.',badge:'new',stars:5},
-  {id:5,name:'Sneakers Pro',category:'moda',price:320000,oldPrice:380000,emoji:'👟',desc:'Diseño exclusivo con suela de alta tecnología.',badge:'sale',stars:4},
-  {id:6,name:'Bolso de Cuero',category:'moda',price:245000,emoji:'👜',desc:'Cuero genuino artesanal con herrajes dorados.',badge:'hot',stars:5},
-  {id:7,name:'Cafetera Barista',category:'hogar',price:520000,emoji:'☕',desc:'Espresso perfecto desde la comodidad de tu hogar.',badge:'hot',stars:5},
-  {id:8,name:'Lámpara Minimal',category:'hogar',price:145000,emoji:'💡',desc:'Diseño nórdico con luz LED regulable.',badge:'new',stars:4},
-  {id:9,name:'Set de Cuchillos',category:'hogar',price:310000,emoji:'🔪',desc:'Acero alemán de alta precisión para chef profesional.',stars:4},
-  {id:10,name:'Bicicleta Carbono',category:'deportes',price:3450000,emoji:'🚴',desc:'Fibra de carbono ultraligero para máximo rendimiento.',badge:'hot',stars:5},
-  {id:11,name:'Pesas Ajustables',category:'deportes',price:380000,oldPrice:420000,emoji:'🏋️',desc:'De 2kg a 24kg en segundos, diseño compacto.',badge:'sale',stars:4},
-  {id:12,name:'Skincare Premium',category:'belleza',price:195000,emoji:'✨',desc:'Suero anti-edad con retinol y vitamina C.',badge:'new',stars:5},
-  {id:13,name:'Perfume Élite',category:'belleza',price:280000,emoji:'🌸',desc:'Fragancia exclusiva con notas de jazmín y oud.',badge:'hot',stars:5},
-  {id:14,name:'Tablet Pro 12"',category:'tecnologia',price:1250000,emoji:'📱',desc:'Pantalla OLED 120Hz ideal para creativos y estudio.',badge:'new',stars:5},
-  {id:15,name:'Silla Ergonómica',category:'hogar',price:890000,oldPrice:1050000,emoji:'🪑',desc:'Soporte lumbar adaptativo para largas jornadas.',badge:'sale',stars:4},
-  {id:16,name:'Zapatillas Running',category:'deportes',price:260000,emoji:'👟',desc:'Amortiguación reactiva para entrenamiento de alto impacto.',stars:4},
-];
+// Los productos ya NO están fijos en el código: se cargan desde la tabla
+// "productos" de Supabase (con join a "categorias") al iniciar la página.
+let PRODUCTS = [];
+let cart={}, currentCat='todos', currentBadge=null;
+let favorites = new Set();
 
-let cart={}, currentCat='todos';
+async function loadProducts(){
+  const grid=document.getElementById('products-grid');
+  grid.innerHTML='<div class="no-results"><div class="nr-icon">⏳</div><p>Cargando productos...</p></div>';
+  const {data,error}=await sb.from('productos').select('*, categorias(nombre,slug)').order('id');
+  if(error){
+    grid.innerHTML='<div class="no-results"><div class="nr-icon">⚠️</div><p>No se pudieron cargar los productos desde Supabase.</p></div>';
+    console.error('Error cargando productos:',error.message);
+    return;
+  }
+  PRODUCTS = (data||[]).map(p=>({
+    id:p.id,
+    name:p.nombre,
+    category:p.categorias?p.categorias.slug:'otros',
+    price:Number(p.precio),
+    oldPrice:p.precio_anterior?Number(p.precio_anterior):null,
+    emoji:p.emoji||'🛍️',
+    desc:p.descripcion||'',
+    badge:p.badge||null,
+    stars:p.estrellas||5,
+  }));
+  renderProducts();
+}
 
 function switchTab(tab){
   document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='register')));
@@ -331,8 +442,36 @@ document.getElementById('reg-pass').addEventListener('keydown',e=>{if(e.key==='E
 
 function filterCat(cat,btn){
   currentCat=cat;
+  currentBadge=null;
   document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
   if(btn)btn.classList.add('active');
+  clearNavActive();
+  document.getElementById('nav-tienda').classList.add('active');
+  renderProducts();
+}
+
+function navGoTienda(){
+  currentCat='todos';currentBadge=null;
+  document.querySelectorAll('.pill').forEach((p,i)=>p.classList.toggle('active',i===0));
+  clearNavActive();
+  document.getElementById('nav-tienda').classList.add('active');
+  document.getElementById('products-grid').scrollIntoView({behavior:'smooth',block:'start'});
+  renderProducts();
+}
+
+function navFilterBadge(badge,link){
+  currentBadge=badge;currentCat='todos';
+  document.querySelectorAll('.pill').forEach((p,i)=>p.classList.toggle('active',i===0));
+  clearNavActive();
+  link.classList.add('active');
+  document.getElementById('products-grid').scrollIntoView({behavior:'smooth',block:'start'});
+  renderProducts();
+}
+
+function clearNavActive(){document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));}
+
+function toggleFavorite(id){
+  if(favorites.has(id))favorites.delete(id);else favorites.add(id);
   renderProducts();
 }
 
@@ -341,13 +480,15 @@ function renderProducts(){
   const grid=document.getElementById('products-grid');
   const filtered=PRODUCTS.filter(p=>{
     const mC=currentCat==='todos'||p.category===currentCat;
+    const mB=!currentBadge||p.badge===currentBadge;
     const mQ=!q||p.name.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q);
-    return mC&&mQ;
+    return mC&&mB&&mQ;
   });
   if(!filtered.length){grid.innerHTML='<div class="no-results"><div class="nr-icon">🔍</div><p>No encontramos productos que coincidan</p></div>';return;}
   grid.innerHTML=filtered.map(p=>`
     <div class="product-card">
       <div class="product-img">
+        <div class="fav-heart ${favorites.has(p.id)?'active':''}" onclick="toggleFavorite(${p.id})">${favorites.has(p.id)?'❤️':'🤍'}</div>
         <div class="product-img-inner">${p.emoji}</div>
         <div class="badge-wrap">
           ${p.badge==='new'?'<span class="badge badge-new">Nuevo</span>':''}
@@ -394,7 +535,141 @@ function updateCartUI(){
   fEl.innerHTML=`<div class="cart-total"><span>Total</span><span class="cart-total-price">$${total.toLocaleString('es-CO')}</span></div><button class="btn-checkout" onclick="checkout()">Finalizar compra →</button>`;
 }
 
-function checkout(){showToast('🎉','¡Pedido procesado exitosamente!');cart={};updateCartUI();document.getElementById('cart-panel').classList.remove('open');}
+// ---------- Checkout con método de pago ----------
+function checkout(){
+  const ids=Object.keys(cart);
+  if(!ids.length)return;
+  const total=ids.reduce((s,k)=>{const p=PRODUCTS.find(x=>x.id==k);return s+(p?p.price*cart[k]:0);},0);
+  document.getElementById('pago-total').textContent='$'+total.toLocaleString('es-CO');
+  document.getElementById('pago-error').style.display='none';
+  selectPayMethod('tarjeta');
+  document.querySelector('input[name="metodo-pago"][value="tarjeta"]').checked=true;
+  openModal('modal-pago');
+}
+
+function selectPayMethod(m){
+  document.getElementById('opt-tarjeta').classList.toggle('selected',m==='tarjeta');
+  document.getElementById('opt-contraentrega').classList.toggle('selected',m==='contraentrega');
+  document.getElementById('fields-tarjeta').classList.toggle('show',m==='tarjeta');
+}
+
+async function confirmarPago(){
+  const metodo=document.querySelector('input[name="metodo-pago"]:checked').value;
+  const errEl=document.getElementById('pago-error');
+  errEl.style.display='none';
+
+  if(metodo==='tarjeta'){
+    const num=document.getElementById('card-number').value.replace(/\s/g,'');
+    const exp=document.getElementById('card-exp').value.trim();
+    const cvv=document.getElementById('card-cvv').value.trim();
+    const name=document.getElementById('card-name').value.trim();
+    if(num.length<13||!exp.includes('/')||cvv.length<3||!name){
+      errEl.textContent='Completa correctamente los datos de la tarjeta (simulados, no se procesan pagos reales).';
+      errEl.style.display='block';
+      return;
+    }
+  }
+
+  const {data:sessionData}=await sb.auth.getSession();
+  const user=sessionData.session?sessionData.session.user:null;
+  if(!user){errEl.textContent='Tu sesión expiró, vuelve a iniciar sesión.';errEl.style.display='block';return;}
+
+  const btn=document.getElementById('btn-pagar');
+  btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Procesando pago...';
+
+  const ids=Object.keys(cart);
+  const total=ids.reduce((s,k)=>{const p=PRODUCTS.find(x=>x.id==k);return s+(p?p.price*cart[k]:0);},0);
+
+  // 1. Crear el pedido
+  const {data:pedido,error:e1}=await sb.from('pedidos').insert({
+    usuario_id:user.id, total, estado:'procesado', metodo_pago:metodo
+  }).select().single();
+
+  if(e1){
+    btn.disabled=false;btn.innerHTML='Confirmar y pagar';
+    errEl.textContent='No se pudo crear el pedido: '+e1.message;
+    errEl.style.display='block';
+    return;
+  }
+
+  // 2. Crear los items del pedido
+  const items=ids.map(id=>{
+    const p=PRODUCTS.find(x=>x.id==id);
+    return {pedido_id:pedido.id, producto_id:p.id, cantidad:cart[id], precio_unitario:p.price};
+  });
+  const {error:e2}=await sb.from('pedido_items').insert(items);
+
+  btn.disabled=false;btn.innerHTML='Confirmar y pagar';
+
+  if(e2){
+    errEl.textContent='El pedido se creó pero hubo un error guardando los productos: '+e2.message;
+    errEl.style.display='block';
+    return;
+  }
+
+  closeModal('modal-pago');
+  document.getElementById('cart-panel').classList.remove('open');
+  cart={};updateCartUI();
+  showToast('🎉','¡Pago '+(metodo==='tarjeta'?'con tarjeta':'contraentrega')+' confirmado! Pedido #'+pedido.id.slice(0,8)+' creado.');
+}
+
+// ---------- Modales ----------
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+async function openProfile(){
+  const {data:sessionData}=await sb.auth.getSession();
+  const user=sessionData.session?sessionData.session.user:null;
+  if(!user)return;
+  const meta=user.user_metadata||{};
+  document.getElementById('perfil-nombre').textContent=meta.full_name||'—';
+  document.getElementById('perfil-correo').textContent=user.email;
+  document.getElementById('perfil-desde').textContent=new Date(user.created_at).toLocaleDateString('es-CO');
+  openModal('modal-perfil');
+}
+
+async function openOrders(){
+  openModal('modal-pedidos');
+  const body=document.getElementById('pedidos-body');
+  body.innerHTML='<div class="empty-state">Cargando pedidos...</div>';
+  const {data:sessionData}=await sb.auth.getSession();
+  const user=sessionData.session?sessionData.session.user:null;
+  if(!user){body.innerHTML='<div class="empty-state">Debes iniciar sesión.</div>';return;}
+
+  const {data,error}=await sb
+    .from('pedidos')
+    .select('id, total, estado, metodo_pago, creado_en, pedido_items(cantidad, precio_unitario, productos(nombre))')
+    .eq('usuario_id',user.id)
+    .order('creado_en',{ascending:false});
+
+  if(error){body.innerHTML='<div class="empty-state">Error cargando pedidos: '+error.message+'</div>';return;}
+  if(!data||!data.length){body.innerHTML='<div class="empty-state">Aún no tienes pedidos. ¡Haz tu primera compra! 🛍️</div>';return;}
+
+  body.innerHTML=data.map(o=>{
+    const items=(o.pedido_items||[]).map(it=>`${it.cantidad}× ${it.productos?it.productos.nombre:'Producto'}`).join(', ');
+    return `<div class="order-item">
+      <div class="oi-top"><span>Pedido #${o.id.slice(0,8)}</span><span class="oi-status">${o.estado}</span></div>
+      <div class="oi-top"><span>${new Date(o.creado_en).toLocaleDateString('es-CO')} · ${o.metodo_pago==='tarjeta'?'💳 Tarjeta':'💵 Contraentrega'}</span><span class="oi-total">$${Number(o.total).toLocaleString('es-CO')}</span></div>
+      <div class="oi-list">${items}</div>
+    </div>`;
+  }).join('');
+}
+
+function openFavorites(){
+  openModal('modal-favoritos');
+  const body=document.getElementById('favoritos-body');
+  const favProducts=PRODUCTS.filter(p=>favorites.has(p.id));
+  if(!favProducts.length){body.innerHTML='<div class="empty-state">Aún no tienes favoritos ⭐</div>';return;}
+  body.innerHTML=favProducts.map(p=>`
+    <div class="order-item" style="display:flex;align-items:center;gap:12px">
+      <div style="font-size:28px">${p.emoji}</div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:600;color:var(--text)">${p.name}</div>
+        <div style="font-size:13px;color:var(--gold)">$${p.price.toLocaleString('es-CO')}</div>
+      </div>
+      <button class="btn-add" onclick="toggleFavorite(${p.id});openFavorites()">Quitar</button>
+    </div>`).join('');
+}
 
 function showToast(icon,msg){
   const c=document.getElementById('toasts');
@@ -404,7 +679,14 @@ function showToast(icon,msg){
   setTimeout(()=>{el.classList.add('removing');setTimeout(()=>el.remove(),300);},2800);
 }
 
-renderProducts();
+document.querySelectorAll('.modal-overlay').forEach(ov=>{
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(ov=>ov.classList.remove('open'));
+});
+
+loadProducts();
 </script>
 </body>
 </html>
